@@ -45,6 +45,10 @@ class CloudVolumeController < ApplicationController
       javascript_redirect(:action => 'backup_new', :id => checked_item_id)
     when 'cloud_volume_backup_restore'
       javascript_redirect(:action => 'backup_select', :id => checked_item_id)
+    when 'cloud_volume_safe_delete'
+      @refresh_div = 'main_div'
+      safe_delete_volumes
+      return false
     else
       return false
     end
@@ -213,6 +217,7 @@ class CloudVolumeController < ApplicationController
       ext_management_system = options.delete(:ems)
       validate_results = CloudVolume.validate_create_volume(ext_management_system)
       if validate_results[:available]
+
         task_id = CloudVolume.create_volume_queue(session[:userid], ext_management_system, options)
 
         if task_id.kind_of?(Integer)
@@ -332,6 +337,45 @@ class CloudVolumeController < ApplicationController
     session[:edit] = nil
     flash_to_session
     javascript_redirect(:action => "show", :id => volume_id)
+  end
+
+
+  # delete selected volumes
+  def safe_delete_volumes
+    assert_privileges("cloud_volume_delete")
+    volumes = find_records_with_rbac(CloudVolume, checked_or_params)
+
+    volumes_to_safe_delete = []
+    volumes.each do |volume|
+      if volume.nil?
+        add_flash(_("Cloud Volume no longer exists."), :error)
+      elsif !volume.attachments.empty?
+        add_flash(_("Cloud Volume \"%{name}\" cannot be removed because it is attached to one or more Instances") %
+                      {:name => volume.name}, :warning)
+      else
+        valid_safe_delete = volume.validate_safe_delete_volume
+        if valid_safe_delete[:available]
+          volumes_to_safe_delete.push(volume)
+        else
+          add_flash(_("Couldn't initiate deletion of Cloud Volume \"%{name}\": %{details}") %
+                        {:name    => volume.name,
+                         :details => valid_delete[:message]}, :error)
+        end
+      end
+    end
+    safe_delete_cloud_volumes(volumes_to_safe_delete) unless volumes_to_safe_delete.empty?
+
+    # refresh the list if applicable
+    if @lastaction == "show_list" && @breadcrumbs.last[:url].include?(@lastaction)
+      show_list
+      @refresh_partial = "layouts/gtl"
+    elsif @lastaction == "show" && @layout == "cloud_volume"
+      @single_delete = true unless flash_errors? || flash_warnings?
+    else
+      drop_breadcrumb(:name => 'dummy', :url => " ") # missing a bc to get correctly back so here's a dummy
+      flash_to_session
+      redirect_to(previous_breadcrumb_url)
+    end
   end
 
   # delete selected volumes
@@ -573,7 +617,17 @@ class CloudVolumeController < ApplicationController
       options.merge!(cinder_manager_options)
     when "ManageIQ::Providers::Amazon::StorageManager::Ebs"
       options.merge!(aws_ebs_options)
+    when "ManageIQ::Providers::Autosde::StorageManager"
+      options.merge!(autosde_options)
     end
+    options
+  end
+
+
+  def autosde_options
+    options = {}
+    options[:ems] = ExtManagementSystem.find(id=params[:storage_manager_id])
+    options[:storage_service] = StorageService.find(id=params[:storage_service_id])
     options
   end
 
@@ -617,6 +671,23 @@ class CloudVolumeController < ApplicationController
     end
     add_flash(n_("Delete initiated for %{number} Cloud Volume.",
                  "Delete initiated for %{number} Cloud Volumes.",
+                 volumes.length) % {:number => volumes.length})
+  end
+
+  def safe_delete_cloud_volumes(volumes)
+    volumes.each do |volume|
+      audit = {
+          :event        => "cloud_volume_record_safe_delete_initiateed",
+          :message      => "[#{volume.name}] Record safe delete initiated",
+          :target_id    => volume.id,
+          :target_class => "CloudVolume",
+          :userid       => session[:userid]
+      }
+      AuditEvent.success(audit)
+      volume.safe_delete_volume_queue(session[:userid])
+    end
+    add_flash(n_("Safe delete initiated for %{number} Cloud Volume.",
+                 "Safe delete initiated for %{number} Cloud Volumes.",
                  volumes.length) % {:number => volumes.length})
   end
 

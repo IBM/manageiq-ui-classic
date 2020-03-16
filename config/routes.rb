@@ -123,6 +123,22 @@ Rails.application.routes.draw do
   )
 
   controller_routes = {
+
+    :block_storage_overview => {
+        :get => %w(
+      show
+    )
+    },
+
+    :ems_storage_dashboard      => {
+        :get => %w(
+      show
+      data
+      aggregate_status_data
+      resources_capacity_data
+    )
+    },
+
     :auth_key_pair_cloud      => {
       :get  => %w(
         download_data
@@ -2209,6 +2225,7 @@ Rails.application.routes.draw do
         tagging_edit
       ),
       :post => %w(
+        new
         button
         dynamic_checkbox_refresh
         dynamic_radio_button_refresh
@@ -2296,6 +2313,78 @@ Rails.application.routes.draw do
         dialog_runner_post +
         exp_post +
         save_post
+    },
+
+    :storage_resource   => {
+        :get  => %w(
+        discover
+        download_data
+        download_summary_pdf
+        protect
+        show
+        show_list
+        tagging_edit
+        change_password
+        new
+      ),
+        :post => %w(
+        button
+        create
+        listnav_search_selected
+        protect
+        quick_search
+        show
+        show_list
+        tag_edit_form_field_changed
+        tagging_edit
+        tl_chooser
+        tree_autoload
+        update
+        wait_for_task
+        x_show
+        launch_console
+      ) +
+            adv_search_post +
+            dialog_runner_post +
+            discover_get_post +
+            exp_post +
+            save_post
+    },
+
+    :storage_system     => {
+        :get  => %w(
+        discover
+        download_data
+        download_summary_pdf
+        protect
+        show
+        show_list
+        tagging_edit
+        change_password
+        new
+      ),
+        :post => %w(
+        button
+        create
+        listnav_search_selected
+        protect
+        quick_search
+        show
+        show_list
+        tag_edit_form_field_changed
+        tagging_edit
+        tl_chooser
+        tree_autoload
+        update
+        wait_for_task
+        x_show
+        launch_console
+      ) +
+            adv_search_post +
+            dialog_runner_post +
+            discover_get_post +
+            exp_post +
+            save_post
     },
 
     :ops                      => {
@@ -3144,6 +3233,7 @@ Rails.application.routes.draw do
     ems_network
     ems_physical_infra
     ems_physical_infra_dashboard
+    ems_storage
     miq_ae_customization
     pxe
   ].freeze
@@ -3201,7 +3291,7 @@ Rails.application.routes.draw do
   # prevent No route matches [GET] "/favicon.ico"
   get '/favicon.ico' => 'static#favicon', :format => false
 
-  %w[ems_cloud ems_infra ems_physical_infra ems_container ems_network].each do |resource|
+  %w[ems_cloud ems_infra ems_physical_infra ems_container ems_network ems_storage ems_block_storages].each do |resource|
     resources(resource.to_sym, :as => resource.pluralize.to_sym, :except => %i[create update destroy])
   end
 end

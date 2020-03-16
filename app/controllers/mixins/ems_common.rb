@@ -75,6 +75,7 @@ module Mixins
           block_storage_managers
           cloud_networks
           cloud_object_store_containers
+          cloud_object_store_objects
           cloud_subnets
           cloud_tenants
           cloud_volumes
@@ -119,6 +120,8 @@ module Mixins
           security_policies
           security_policy_rules
           storage_managers
+          storage_resources
+          storage_systems
           storages
           vms
         ]
@@ -151,12 +154,18 @@ module Mixins
                            :flash_msg   => err.message,
                            :flash_error => true)
       end
-      if respond_to?(:model_feature_for_action) && !@ems.supports?(model_feature_for_action(:edit))
+      if @ems.respond_to?(:model_feature_for_action) && !@ems.supports?(@ems.model_feature_for_action(:edit))
         flash_to_session(_("Edit of %{object_type} %{object_name} is not supported.") % {
           :object_type => ui_lookup(:model => model.to_s),
           :object_name => @ems.name
         }, :error)
-        return redirect_to(:action => @lastaction || "show_list")
+        # If we are inside the dashboard we need the :action to be set to show and not to the value inside @lastaction which is show_dashboard
+        if @lastaction == "show_dashboard"
+          redirect_args = {:action => "show", :id => @ems.id}
+        elsif @lastaction
+          redirect_args = {:action => @lastaction}
+        end
+        return redirect_to(redirect_args || "show_list")
       end
       @in_a_form = true
       session[:changed] = false
@@ -264,6 +273,9 @@ module Mixins
         when "storage_delete"                   then deletestorages
         when "storage_scan"                     then scanstorage
         when "storage_tag"                      then tag(Storage)
+        when "storage_system_new"               then javascript_redirect(:controller => 'storage_system',
+                                                                         :action     => 'new',
+                                                                         :storage_manager_id => block_storage_manager_id(params[:id]))
         # Edit Tags for Network Manager Relationship pages
         when "availability_zone_tag"            then tag(AvailabilityZone)
         when "cloud_network_tag"                then tag(CloudNetwork)
@@ -384,6 +396,7 @@ module Mixins
           ems_container_recheck_auth_status
           ems_infra_recheck_auth_status
           ems_physical_infra_recheck_auth_status
+          ems_storage_recheck_auth_status
         ].include?(params[:pressed])
           if params[:id]
             table_key = :table

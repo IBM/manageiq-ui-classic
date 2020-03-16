@@ -15,7 +15,7 @@ class EmsBlockStorageController < ApplicationController
   end
 
   def self.table_name
-    @table_name ||= "ems_block_storage"
+    @table_name ||= "ems_storage"
   end
 
   def breadcrumb_name(_model)
@@ -38,6 +38,14 @@ class EmsBlockStorageController < ApplicationController
         {:url   => controller_url, :title => _("Managers")},
       ],
     }
+  end
+  def restful?
+    true
+  end
+
+  def get_session_data
+    super
+    @layout = "ems_block_storage"
   end
 
   menu_section :bst
