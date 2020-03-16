@@ -19,6 +19,15 @@ module EmsStorageHelper::TextualSummary
     TextualGroup.new(_("Relationships"), relationships)
   end
 
+  def textual_group_storage_relationships
+    relationships = %i[
+      cloud_volumes
+      storage_resources
+      storage_systems
+    ]
+    TextualGroup.new(_("Relationships"), relationships)
+  end
+
   def textual_group_status
     TextualGroup.new(_("Status"), textual_authentications(@record.authentication_for_summary) + %i[refresh_status refresh_date])
   end
@@ -81,5 +90,13 @@ module EmsStorageHelper::TextualSummary
 
   def textual_cloud_volume_types
     textual_link(@record.try(:cloud_volume_types), :label => _('Cloud Volume Types'))
+  end
+
+  def textual_storage_resources
+    textual_link(@record.try(:storage_resources), :label => _('Storage Resources (Pools)'))
+  end
+
+  def textual_storage_systems
+    textual_link(@record.try(:storage_systems), :label => _('Storage Systems'))
   end
 end
