@@ -1,0 +1,5 @@
+- url = url_for_only_path(:controller => 'ems_block_storage', :action => 'create', :id => (@ems.id || 'new'))
+= react('ProviderForm', :redirect => ems_block_storage_path,
+  :kind => 'storage',
+  :title => ui_lookup(:model => 'ManageIQ::Providers::StorageManager')
+  )
