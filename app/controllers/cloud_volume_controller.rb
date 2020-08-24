@@ -38,17 +38,21 @@ class CloudVolumeController < ApplicationController
     when 'cloud_volume_edit'
       javascript_redirect(:action => 'edit', :id => checked_item_id)
     when 'cloud_volume_snapshot_create'
-      javascript_redirect(:action => 'snapshot_new', :id => checked_item_id)
+      volume_support_action?(:snapshot_create) ? javascript_redirect(:action => 'snapshot_new', :id => checked_item_id) : render_flash_not_support_msg(:snapshot_create)
     when 'cloud_volume_new'
       javascript_redirect(:action => 'new')
     when 'cloud_volume_backup_create'
-      javascript_redirect(:action => 'backup_new', :id => checked_item_id)
+      volume_support_action?(:backup_create) ? javascript_redirect(:action => 'backup_new', :id => checked_item_id) : render_flash_not_support_msg(:backup_create)
     when 'cloud_volume_backup_restore'
-      javascript_redirect(:action => 'backup_select', :id => checked_item_id)
+      volume_support_action?(:backup_restore) ? javascript_redirect(:action => 'backup_select', :id => checked_item_id) : render_flash_not_support_msg(:backup_restore)
     when 'cloud_volume_safe_delete'
-      @refresh_div = 'main_div'
-      safe_delete_volumes
-      return false
+      if volume_support_action?(:safe_delete)
+        @refresh_div = 'main_div'
+        safe_delete_volumes
+        return false
+      else
+        render_flash_not_support_msg(:safe_delete)
+      end
     else
       return false
     end
@@ -592,6 +596,19 @@ class CloudVolumeController < ApplicationController
   end
 
   private
+
+  def volume_support_action?(action)
+    volume = find_record_with_rbac(CloudVolume, checked_item_id)
+    volume.supports?(action) ? true : false
+  end
+
+  def render_flash_not_support_msg(action)
+    volume = find_record_with_rbac(CloudVolume, checked_item_id)
+    render_flash(_("Cloud Volume \"%{volume_name}\" is not supporting %{action}") % {
+        :volume_name => volume.name,
+        :action => SupportsFeatureMixin::QUERYABLE_FEATURES[action]
+    }, :error)
+  end
 
   def textual_group_list
     [%i[properties relationships], %i[tags]]
