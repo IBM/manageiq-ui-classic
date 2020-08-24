@@ -71,10 +71,11 @@ class ApplicationHelper::Toolbar::CloudVolumesCenter < ApplicationHelper::Toolba
                          'pficon pficon-delete fa-lg',
                          t = N_('Safely delete the Cloud Volume'),
                          t,
+                         :klass        => ApplicationHelper::Button::CloudVolumeSafeDelete,
                          :url_parms    => 'main_div',
                          :send_checked => true,
                          :enabled      => false,
-                         :onwhen       => '1+'
+                         :onwhen       => '1'
                      ),
                      button(
                        :cloud_volume_edit,
