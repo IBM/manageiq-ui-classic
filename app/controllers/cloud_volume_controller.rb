@@ -38,24 +38,31 @@ class CloudVolumeController < ApplicationController
     when 'cloud_volume_edit'
       javascript_redirect(:action => 'edit', :id => checked_item_id)
     when 'cloud_volume_snapshot_create'
-      volume_support_action?(:snapshot_create) ? javascript_redirect(:action => 'snapshot_new', :id => checked_item_id) : render_flash_not_support_msg(:snapshot_create)
+      validate_results = validate_item_supports_action_button(:snapshot_create, CloudVolume)
+      if validate_results[:action_supported] then javascript_redirect(:action => 'snapshot_new', :id => checked_item_id) end
     when 'cloud_volume_new'
       javascript_redirect(:action => 'new')
     when 'cloud_volume_backup_create'
-      volume_support_action?(:backup_create) ? javascript_redirect(:action => 'backup_new', :id => checked_item_id) : render_flash_not_support_msg(:backup_create)
+      validate_results = validate_item_supports_action_button(:backup_create, CloudVolume)
+      if validate_results[:action_supported] then javascript_redirect(:action => 'backup_new', :id => checked_item_id) end
     when 'cloud_volume_backup_restore'
-      volume_support_action?(:backup_restore) ? javascript_redirect(:action => 'backup_select', :id => checked_item_id) : render_flash_not_support_msg(:backup_restore)
+      validate_results = validate_item_supports_action_button(:backup_restore, CloudVolume)
+      if validate_results[:action_supported] then javascript_redirect(:action => 'backup_select', :id => checked_item_id) end
     when 'cloud_volume_safe_delete'
-      if volume_support_action?(:safe_delete)
+      validate_results = validate_item_supports_action_button(:safe_delete, CloudVolume)
+      if validate_results[:action_supported]
         @refresh_div = 'main_div'
         safe_delete_volumes
         return false
-      else
-        render_flash_not_support_msg(:safe_delete)
       end
     else
       return false
     end
+
+    if validate_results && validate_results[:message]
+      render_flash(validate_results[:message], :error)
+    end
+
     true
   end
 
@@ -596,19 +603,6 @@ class CloudVolumeController < ApplicationController
   end
 
   private
-
-  def volume_support_action?(action)
-    volume = find_record_with_rbac(CloudVolume, checked_item_id)
-    volume.supports?(action) ? true : false
-  end
-
-  def render_flash_not_support_msg(action)
-    volume = find_record_with_rbac(CloudVolume, checked_item_id)
-    render_flash(_("Cloud Volume \"%{volume_name}\" is not supporting %{action}") % {
-        :volume_name => volume.name,
-        :action => SupportsFeatureMixin::QUERYABLE_FEATURES[action]
-    }, :error)
-  end
 
   def textual_group_list
     [%i[properties relationships], %i[tags]]
