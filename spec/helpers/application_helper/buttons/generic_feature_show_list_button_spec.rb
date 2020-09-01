@@ -3,9 +3,11 @@ describe ApplicationHelper::Button::GenericFeatureShowListButton do
 
   describe "#backup_create" do
     let(:feature) { :backup_create }
-    let(:props) { {:options => {:feature => feature,
-                                :managers  => %w[StorageManager CloudManager],
-                                :target_class  => "CloudVolume"}} }
+    let(:props) do
+      {:options => {:feature      => feature,
+                    :managers     => %w[StorageManager CloudManager],
+                    :target_class => "CloudVolume"}}
+    end
     let(:button) { described_class.new(view_context, {}, {}, props) }
 
     context "with no providers" do
@@ -33,11 +35,12 @@ describe ApplicationHelper::Button::GenericFeatureShowListButton do
 
   describe "#backup_restore" do
     let(:feature) { :backup_restore }
-    let(:props) { {:options => {:feature => feature,
-                                :managers  => %w[StorageManager CloudManager],
-                                :target_class  => "CloudVolume"}} }
+    let(:props) do
+      {:options => {:feature      => feature,
+                    :managers     => %w[StorageManager CloudManager],
+                    :target_class => "CloudVolume"}}
+    end
     let(:button) { described_class.new(view_context, {}, {}, props) }
-
 
     context "with no providers" do
       it "the button is disabled" do
@@ -64,11 +67,12 @@ describe ApplicationHelper::Button::GenericFeatureShowListButton do
 
   describe "#safe_delete" do
     let(:feature) { :safe_delete }
-    let(:props) { {:options => {:feature => feature,
-                                :managers  => %w[StorageManager CloudManager],
-                                :target_class  => "CloudVolume"}} }
+    let(:props) do
+      {:options => {:feature      => feature,
+                    :managers     => %w[StorageManager CloudManager],
+                    :target_class => "CloudVolume"}}
+    end
     let(:button) { described_class.new(view_context, {}, {}, props) }
-
 
     context "with no providers" do
       it "the button is disabled" do
@@ -92,5 +96,4 @@ describe ApplicationHelper::Button::GenericFeatureShowListButton do
       end
     end
   end
-
 end

@@ -12,7 +12,6 @@ class StorageSystemController < ApplicationController
   after_action :cleanup_action
   after_action :set_session_data
 
-
   def specific_buttons(pressed)
     case pressed
     when 'storage_system_new'
@@ -32,7 +31,7 @@ class StorageSystemController < ApplicationController
       @storage_manager = find_record_with_rbac(ExtManagementSystem, params[:storage_manager_id])
     end
     drop_breadcrumb(:name => _("Add New %{table}") % {:table => ui_lookup(:table => table_name)},
-                    :url => "/#{controller_name}/new")
+                    :url  => "/#{controller_name}/new")
   end
 
   def new_storage_system_form_fields
@@ -40,10 +39,9 @@ class StorageSystemController < ApplicationController
     @storage_system = find_record_with_rbac(self.class.model, params[:id]) if params[:id] != 'new'
 
     render :json => {
-        :name => @storage_system.name,
+      :name => @storage_system.name,
     }
   end
-
 
   def create
     assert_privileges("storage_system_new")
@@ -53,7 +51,8 @@ class StorageSystemController < ApplicationController
       ext_management_system = options.delete(:ems)
 
       task_id = StorageSystem.create_storage_system_queue(
-          session[:userid], ext_management_system, options)
+        session[:userid], ext_management_system, options
+      )
 
       if task_id.kind_of?(Integer)
         flash_to_session(_("Add of %{model} initiated") % {:model => ui_lookup(:model => self.class.model.to_s)})
@@ -65,7 +64,7 @@ class StorageSystemController < ApplicationController
 
     when "cancel" then
       flash_to_session(_("Add of %{model} was cancelled by the user") % {:model => ui_lookup(:model => self.class.model.to_s)})
-      javascript_redirect action: @lastaction
+      javascript_redirect(:action => @lastaction)
     end
   end
 
@@ -106,4 +105,3 @@ class StorageSystemController < ApplicationController
 
   menu_section "storage_system"
 end
-

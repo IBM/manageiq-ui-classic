@@ -1,8 +1,4 @@
-# todo [liran] - need to be refactor to use our SdeManager. more info in https://www.manageiq.org/docs/guides/ui/textual_summary
-
 module StorageResourceHelper::TextualSummary
-
-
   include TextualMixins::TextualGroupTags
 
   #
@@ -11,17 +7,16 @@ module StorageResourceHelper::TextualSummary
 
   def textual_group_properties
     TextualGroup.new(
-        _("Properties"),
-        %i[
-          name
-          logical_free
-          logical_total
-        ]
+      _("Properties"),
+      %i[
+        name
+        logical_free
+        logical_total
+      ]
     )
   end
 
   def textual_group_relationships
-
   end
 
   #

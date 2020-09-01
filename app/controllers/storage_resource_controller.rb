@@ -8,8 +8,6 @@ class StorageResourceController < ApplicationController
   include Mixins::GenericShowMixin
   include Mixins::GenericButtonMixin
 
-
-
   before_action :check_privileges
   before_action :get_session_data
   after_action :cleanup_action
@@ -58,7 +56,6 @@ class StorageResourceController < ApplicationController
   end
   helper_method :textual_group_list
 
-
   def get_session_data
     @layout = "storage_resource"
   end
@@ -66,7 +63,6 @@ class StorageResourceController < ApplicationController
   def set_session_data
     session[:layout] = @layout
   end
-
 
   # needed to highlight the selected menu section
   menu_section "storage_resource"

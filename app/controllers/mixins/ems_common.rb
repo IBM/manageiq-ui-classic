@@ -273,8 +273,8 @@ module Mixins
         when "storage_delete"                   then deletestorages
         when "storage_scan"                     then scanstorage
         when "storage_tag"                      then tag(Storage)
-        when "storage_system_new"               then javascript_redirect(:controller => 'storage_system',
-                                                                         :action     => 'new',
+        when "storage_system_new"               then javascript_redirect(:controller         => 'storage_system',
+                                                                         :action             => 'new',
                                                                          :storage_manager_id => block_storage_manager_id(params[:id]))
         # Edit Tags for Network Manager Relationship pages
         when "availability_zone_tag"            then tag(AvailabilityZone)

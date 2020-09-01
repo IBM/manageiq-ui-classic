@@ -1,8 +1,4 @@
-# todo [liran] - need to be refactor to use our SdeManager. more info in https://www.manageiq.org/docs/guides/ui/textual_summary
-
 module StorageSystemHelper::TextualSummary
-
-
   include TextualMixins::TextualGroupTags
 
   #
@@ -11,14 +7,14 @@ module StorageSystemHelper::TextualSummary
 
   def textual_group_properties
     TextualGroup.new(
-        _("Properties"),
-        %i[
-          name
-          ems_name
-          management_ip
-          storage_family
-          system_type
-        ]
+      _("Properties"),
+      %i[
+        name
+        ems_name
+        management_ip
+        storage_family
+        system_type
+      ]
     )
   end
 

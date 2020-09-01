@@ -350,7 +350,6 @@ class CloudVolumeController < ApplicationController
     javascript_redirect(:action => "show", :id => volume_id)
   end
 
-
   # delete selected volumes
   def safe_delete_volumes
     assert_privileges("cloud_volume_delete")
@@ -634,11 +633,10 @@ class CloudVolumeController < ApplicationController
     options
   end
 
-
   def autosde_options
     options = {}
-    options[:ems] = ExtManagementSystem.find(id=params[:storage_manager_id])
-    options[:storage_service] = StorageService.find(id=params[:storage_service_id])
+    options[:ems] = ExtManagementSystem.find(id = params[:storage_manager_id])
+    options[:storage_service] = StorageService.find(id = params[:storage_service_id])
     options
   end
 
@@ -688,11 +686,11 @@ class CloudVolumeController < ApplicationController
   def safe_delete_cloud_volumes(volumes)
     volumes.each do |volume|
       audit = {
-          :event        => "cloud_volume_record_safe_delete_initiateed",
-          :message      => "[#{volume.name}] Record safe delete initiated",
-          :target_id    => volume.id,
-          :target_class => "CloudVolume",
-          :userid       => session[:userid]
+        :event        => "cloud_volume_record_safe_delete_initiateed",
+        :message      => "[#{volume.name}] Record safe delete initiated",
+        :target_id    => volume.id,
+        :target_class => "CloudVolume",
+        :userid       => session[:userid]
       }
       AuditEvent.success(audit)
       volume.safe_delete_volume_queue(session[:userid])

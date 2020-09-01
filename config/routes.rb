@@ -125,18 +125,18 @@ Rails.application.routes.draw do
   controller_routes = {
 
     :block_storage_overview => {
-        :get => %w(
-      show
-    )
+      :get => %w[
+        show
+      ]
     },
 
     :ems_storage_dashboard      => {
-        :get => %w(
-      show
-      data
-      aggregate_status_data
-      resources_capacity_data
-    )
+      :get => %w[
+        show
+        data
+        aggregate_status_data
+        resources_capacity_data
+      ]
     },
 
     :auth_key_pair_cloud      => {
@@ -2317,7 +2317,7 @@ Rails.application.routes.draw do
     },
 
     :storage_resource   => {
-        :get  => %w(
+      :get  => %w[
         discover
         download_data
         download_summary_pdf
@@ -2327,24 +2327,24 @@ Rails.application.routes.draw do
         tagging_edit
         change_password
         new
-      ),
-        :post => %w(
-        button
-        create
-        listnav_search_selected
-        protect
-        quick_search
-        show
-        show_list
-        tag_edit_form_field_changed
-        tagging_edit
-        tl_chooser
-        tree_autoload
-        update
-        wait_for_task
-        x_show
-        launch_console
-      ) +
+      ],
+        :post => %w[
+          button
+          create
+          listnav_search_selected
+          protect
+          quick_search
+          show
+          show_list
+          tag_edit_form_field_changed
+          tagging_edit
+          tl_chooser
+          tree_autoload
+          update
+          wait_for_task
+          x_show
+          launch_console
+        ] +
             adv_search_post +
             dialog_runner_post +
             discover_get_post +
@@ -2353,7 +2353,7 @@ Rails.application.routes.draw do
     },
 
     :storage_system     => {
-        :get  => %w(
+      :get  => %w[
         discover
         download_data
         download_summary_pdf
@@ -2363,24 +2363,24 @@ Rails.application.routes.draw do
         tagging_edit
         change_password
         new
-      ),
-        :post => %w(
-        button
-        create
-        listnav_search_selected
-        protect
-        quick_search
-        show
-        show_list
-        tag_edit_form_field_changed
-        tagging_edit
-        tl_chooser
-        tree_autoload
-        update
-        wait_for_task
-        x_show
-        launch_console
-      ) +
+      ],
+        :post => %w[
+          button
+          create
+          listnav_search_selected
+          protect
+          quick_search
+          show
+          show_list
+          tag_edit_form_field_changed
+          tagging_edit
+          tl_chooser
+          tree_autoload
+          update
+          wait_for_task
+          x_show
+          launch_console
+        ] +
             adv_search_post +
             dialog_runner_post +
             discover_get_post +

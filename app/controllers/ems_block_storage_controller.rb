@@ -39,6 +39,7 @@ class EmsBlockStorageController < ApplicationController
       ],
     }
   end
+
   def restful?
     true
   end

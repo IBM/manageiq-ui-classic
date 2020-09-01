@@ -1,5 +1,4 @@
 class ApplicationHelper::Button::GenericFeatureShowListButton < ApplicationHelper::Button::ButtonNewDiscover
-
   def initialize(view_context, view_binding, instance_data, props)
     super
     @feature = props[:options][:feature]
@@ -16,5 +15,4 @@ class ApplicationHelper::Button::GenericFeatureShowListButton < ApplicationHelpe
       end
     end
   end
-
 end
