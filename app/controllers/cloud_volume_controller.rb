@@ -635,8 +635,8 @@ class CloudVolumeController < ApplicationController
 
   def autosde_options
     options = {}
-    options[:ems] = ExtManagementSystem.find(id = params[:storage_manager_id])
-    options[:storage_service] = StorageService.find(id = params[:storage_service_id])
+    options[:ems] = ExtManagementSystem.find(params[:storage_manager_id])
+    options[:storage_service] = StorageService.find(params[:storage_service_id])
     options
   end
 

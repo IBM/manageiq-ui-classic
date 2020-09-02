@@ -21,10 +21,10 @@ module EmsStorageHelper::TextualSummary
 
   def textual_group_storage_relationships
     relationships = %i[
-                       cloud_volumes
-                       storage_resources
-                       storage_systems
-                    ]
+      cloud_volumes
+      storage_resources
+      storage_systems
+    ]
     TextualGroup.new(_("Relationships"), relationships)
   end
 
@@ -99,5 +99,4 @@ module EmsStorageHelper::TextualSummary
   def textual_storage_systems
     textual_link(@record.try(:storage_systems), :label => _('Storage Systems'))
   end
-
 end

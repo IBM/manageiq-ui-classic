@@ -69,8 +69,8 @@ class EmsStorageController < ApplicationController
     return group_list if group_list
 
     [
-        %i[properties status],
-        %i[relationships topology smart_management]
+      %i[properties status],
+      %i[relationships topology smart_management]
     ]
   end
   helper_method :textual_group_list
