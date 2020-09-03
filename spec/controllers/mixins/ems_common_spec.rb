@@ -345,16 +345,16 @@ describe EmsBlockStorageController do
       it "when edit is pressed for unsupported block storage manager type" do
         allow(controller).to receive(:role_allows?).and_return(true)
         ems = FactoryBot.create(:ems_cinder)
-        get :edit, :params => { :id => ems.id}
+        get :edit, :params => {:id => ems.id}
         expect(response.status).to eq(302)
         expect(session['flash_msgs']).not_to be_empty
         expect(session['flash_msgs'].first[:message]).to include('is not supported')
       end
 
-      it "when edit is pressed for supported network manager type" do
+      it "when edit is pressed for supported block storage manager type" do
         allow(controller).to receive(:role_allows?).and_return(true)
         ems = FactoryBot.create(:ems_autosde)
-        get :edit, :params => { :id => ems.id}
+        get :edit, :params => {:id => ems.id}
         expect(response.status).to eq(200)
         expect(session['flash_msgs']).to be_nil
       end

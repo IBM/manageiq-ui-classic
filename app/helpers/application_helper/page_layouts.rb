@@ -35,7 +35,6 @@ module ApplicationHelper::PageLayouts
       monitor_alerts_most_recent
       my_tasks
       ops
-      block_storage_overview
       physical_infra_overview
       physical_infra_topology
       physical_network_port

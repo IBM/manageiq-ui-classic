@@ -124,16 +124,9 @@ Rails.application.routes.draw do
 
   controller_routes = {
 
-    :block_storage_overview => {
-      :get => %w[
-        show
-      ]
-    },
-
     :ems_storage_dashboard      => {
       :get => %w[
         show
-        data
         aggregate_status_data
         resources_capacity_data
       ]
@@ -143,7 +136,6 @@ Rails.application.routes.draw do
       :get  => %w(
         download_data
         download_summary_pdf
-        index
         new
         protect
         show
@@ -2226,7 +2218,6 @@ Rails.application.routes.draw do
       ),
       :post => %w(
         new
-        create
         button
         dynamic_checkbox_refresh
         dynamic_radio_button_refresh
@@ -2325,25 +2316,18 @@ Rails.application.routes.draw do
         show
         show_list
         tagging_edit
-        change_password
-        new
       ],
         :post => %w[
           button
-          create
           listnav_search_selected
           protect
           quick_search
           show
           show_list
-          tag_edit_form_field_changed
           tagging_edit
           tl_chooser
           tree_autoload
-          update
           wait_for_task
-          x_show
-          launch_console
         ] +
             adv_search_post +
             dialog_runner_post +
@@ -2361,7 +2345,6 @@ Rails.application.routes.draw do
         show
         show_list
         tagging_edit
-        change_password
         new
       ],
         :post => %w[
@@ -2372,14 +2355,10 @@ Rails.application.routes.draw do
           quick_search
           show
           show_list
-          tag_edit_form_field_changed
           tagging_edit
           tl_chooser
           tree_autoload
-          update
           wait_for_task
-          x_show
-          launch_console
         ] +
             adv_search_post +
             dialog_runner_post +
@@ -3230,6 +3209,7 @@ Rails.application.routes.draw do
     ems_cloud_dashboard
     ems_container
     ems_infra
+    ems_storage_dashboard
     ems_infra_dashboard
     ems_network
     ems_physical_infra

@@ -1,8 +1,8 @@
 module Mixins
   module GenericFeatureActionMixin
-    #This function can be override by the controller to pass a different feature
+    # This function can be override by the controller to pass a different feature
     def edit_feature
-      case self.model.name
+      case model.name
       when "ManageIQ::Providers::StorageManager"
         # Only storage managers that can be added directly from the storage section can be edit.
         :ems_storage_new

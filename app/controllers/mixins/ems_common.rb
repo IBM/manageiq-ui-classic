@@ -160,13 +160,13 @@ module Mixins
           :object_name => @ems.name
         }, :error)
         # If we are inside the dashboard we need the :action to be set to show and not to the value inside @lastaction which is show_dashboard
-        if @lastaction == "show_dashboard"
-          redirect_args = {:action => "show", :id => @ems.id}
-        elsif @lastaction == "show"
-          redirect_args = {:action => "show", :id => @ems.id}
-        else
-          redirect_args = {:action => @lastaction || "show_list"}
-        end
+        redirect_args = if @lastaction == "show_dashboard"
+                          {:action => "show", :id => @ems.id}
+                        elsif @lastaction == "show"
+                          {:action => "show", :id => @ems.id}
+                        else
+                          {:action => @lastaction || "show_list"}
+                        end
         return redirect_to(redirect_args || "show_list")
       end
       @in_a_form = true
