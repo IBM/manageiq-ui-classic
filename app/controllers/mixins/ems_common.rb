@@ -154,7 +154,7 @@ module Mixins
                            :flash_msg   => err.message,
                            :flash_error => true)
       end
-      if @ems.respond_to?(:model_feature_for_action) && !@ems.supports?(@ems.model_feature_for_action(:edit))
+      if respond_to?(:model_feature_for_action) && !@ems.supports?(model_feature_for_action(:edit))
         flash_to_session(_("Edit of %{object_type} %{object_name} is not supported.") % {
           :object_type => ui_lookup(:model => model.to_s),
           :object_name => @ems.name
@@ -162,8 +162,10 @@ module Mixins
         # If we are inside the dashboard we need the :action to be set to show and not to the value inside @lastaction which is show_dashboard
         if @lastaction == "show_dashboard"
           redirect_args = {:action => "show", :id => @ems.id}
-        elsif @lastaction
-          redirect_args = {:action => @lastaction}
+        elsif @lastaction == "show"
+          redirect_args = {:action => "show", :id => @ems.id}
+        else
+          redirect_args = {:action => @lastaction || "show_list"}
         end
         return redirect_to(redirect_args || "show_list")
       end
