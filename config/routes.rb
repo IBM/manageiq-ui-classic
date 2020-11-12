@@ -2389,8 +2389,10 @@ Rails.application.routes.draw do
         index
         show
         show_list
+        new
       ],
       :post => %w[
+        button
         listnav_search_selected
         quick_search
         show_list
