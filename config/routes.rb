@@ -2419,6 +2419,20 @@ Rails.application.routes.draw do
         save_post
     },
 
+    :volume_mapping => {
+      :get  => %w(
+        download_data
+        download_summary_pdf
+        index
+        perf_top_chart
+        protect
+        show
+        show_list
+        tagging_edit
+      ) +
+        compare_get
+    },
+
     :ops                      => {
       :get  => %w(
         dialog_load

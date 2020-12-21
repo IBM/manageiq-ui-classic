@@ -201,6 +201,16 @@ module Menu
                                            'storage_resource',
                                            {:feature => 'storage_resource_show_list'},
                                            '/storage_resource/show_list'),
+                            Menu::Item.new('physical_storage_consumer',
+                                           N_('Storage Consumers'),
+                                           'physical_storage_consumer',
+                                           {:feature => 'physical_storage_consumer_show_list'},
+                                           '/physical_storage_consumer/show_list'),
+                            Menu::Item.new('volume_mapping',
+                                           N_('Volume Mappings'),
+                                           'volume_mapping',
+                                           {:feature => 'volume_mapping_show_list'},
+                                           '/volume_mapping/show_list'),
                           ])
       end
 
