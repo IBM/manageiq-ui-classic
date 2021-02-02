@@ -44,3 +44,4 @@ module HostInitiatorHelper::TextualSummary
     textual_link(@record.physical_storage)
   end
 end
+
