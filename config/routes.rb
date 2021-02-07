@@ -2428,9 +2428,19 @@ Rails.application.routes.draw do
         protect
         show
         show_list
+        new
         tagging_edit
       ) +
-        compare_get
+        compare_get,
+      :post => %w[
+        button
+        listnav_search_selected
+        quick_search
+        show_list
+      ] +
+        adv_search_post +
+        exp_post +
+        save_post
     },
 
     :ops                      => {
